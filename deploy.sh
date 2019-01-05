@@ -1,19 +1,19 @@
 #!/bin/bash
 
-REGION=us-east-1
-SERVICE_NAME=tetra-app-service
+REGION=eu-west-2
+SERVICE_NAME=tetranoodle-service-awsvpc
 CLUSTER=tetranoodle-cluster
 IMAGE_VERSION="v_"${BUILD_NUMBER}
-TASK_FAMILY="tetra-app"
+TASK_FAMILY="tetranoodle-sampletask"
 
 # Create a new task definition for this build
 
-sed -e "s;%BUILD_NUMBER%;${BUILD_NUMBER};g" ../tetra-app.json > tetra-app-v_${BUILD_NUMBER}.json
+sed -e "s;%BUILD_NUMBER%;${BUILD_NUMBER};g" tetranoodle-sampletask.json > tetranoodle-sampletask-v_${BUILD_NUMBER}.json
 
-aws ecs register-task-definition --family tetra-app --cli-input-json file://tetra-app-v_${BUILD_NUMBER}.json
+aws ecs register-task-definition --family tetranoodle-sampletask --cli-input-json file://tetranoodle-sampletask-v_${BUILD_NUMBER}.json
 
 # Update the service with the new task definition and desired count
-REVISION=`aws ecs describe-task-definition --task-definition tetra-app | egrep "revision" | tr "/" " " | awk '{print $2}' | sed 's/"$//'`
+REVISION=`aws ecs describe-task-definition --task-definition tetranoodle-sampletask | egrep "revision" | tr "/" " " | awk '{print $2}' | sed 's/"$//'`
 SERVICES=`aws ecs describe-services --services ${SERVICE_NAME} --cluster ${CLUSTER} --region ${REGION} | jq .failures[]`
 
 
