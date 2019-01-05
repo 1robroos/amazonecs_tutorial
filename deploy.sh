@@ -7,8 +7,8 @@ IMAGE_VERSION="v_"${BUILD_NUMBER}
 TASK_FAMILY="tetranoodle-sampletask"
 
 # Create a new task definition for this build
+sed -e "s;\${BUILD_NUMBER};${BUILD_NUMBER};g" tetranoodle-sampletask.json > tetranoodle-sampletask-v_${BUILD_NUMBER}.json
 
-sed -e "s;%BUILD_NUMBER%;${BUILD_NUMBER};g" tetranoodle-sampletask.json > tetranoodle-sampletask-v_${BUILD_NUMBER}.json
 
 aws ecs register-task-definition --family tetranoodle-sampletask --cli-input-json file://tetranoodle-sampletask-v_${BUILD_NUMBER}.json
 
